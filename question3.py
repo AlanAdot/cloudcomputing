@@ -1,13 +1,5 @@
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      HP
-#
-# Created:     17/10/2020
-# Copyright:   (c) HP 2020
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
+
+
 import requests
 import json
 from pprint import pprint
