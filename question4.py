@@ -49,7 +49,6 @@ def getByname(nom):
 
     return (list(stations))
 
-
 #program to update a station
 def update_Stations_Name(id,name):
     try:
@@ -75,7 +74,7 @@ def area_search(p1,p2,p3,p4,state):
                 }
             }
         },
-        {"$set": {"activate":state}})
+        {"$set": {"deactivate":state}})
 
 
 def ratio_bike():
