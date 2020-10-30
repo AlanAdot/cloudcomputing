@@ -17,17 +17,16 @@ if __name__ == '__main__':
     main()
 
     def nearStation(lat,lon):
-    near_station = db.stations2.find({'geometry':{
-        '$near':{'$geometry':{
+        db.stations2.find({'geometry':{
+            $near:{
+                $geometry:{
+                    type: "Point",
+                    coordinates: [lon,lat]
+                },
+                $maxDistance:1000,
+                $minDistance:0
+                }
+            }})
 
-            'type': "Point",
-
-            'coordinates': [lon,lat]},
-
-            '$maxDistance':1000,
-
-            '$minDistance':0
-            }
-        }})
-
-    return(list(near_station))
+    #return(list(near_station))
+print(nearStation(3.048567, 50.634268))

@@ -58,7 +58,7 @@ def update_Stations_Name(id,name):
         pprint("error update")
         pass
 
-#program to delete station and datas
+#program to delete station and datas (en identifiant l'id)
 def delete_station(id):
     db.stations2.delete_many( {"_id":id} )
     db.datas.delete_many( {"station_id":id})
@@ -101,7 +101,7 @@ def ratio_bike():
     return(result)
 
     
-print("Le result est :  ", ratio_bike)
+#print("Le result est :  ", ratio_bike)
 
 # print(getByname("gare"))
 
@@ -118,7 +118,6 @@ print("Le result est :  ", ratio_bike)
 # p4 = [3.99,50.01]
 
 #area_search(p1,p2,p3,p4,False)
-print("teste\n")
-print(getByname)
 
-print(datetime.datetime.today().hour) 
+
+#print(datetime.datetime.today().hour) 
