@@ -13,20 +13,19 @@ db = atlas.bicycle
 def main():
     pass
 
-if __name__ == '__main__':
-    main()
 
-    def nearStation(lat,lon):
-        db.stations2.find({'geometry':{
-            $near:{
-                $geometry:{
-                    type: "Point",
-                    coordinates: [lon,lat]
-                },
-                $maxDistance:1000,
-                $minDistance:0
-                }
-            }})
+def nearStation(lat,lon):
+    db.stations2.find({'geometry':{
+        $near:{
+            $geometry:{
+                type: "Point",
+                coordinates: [lon,lat]
+            },
+            $maxDistance:1000,
+            $minDistance:0
+            }
+        }})
 
     #return(list(near_station))
-print(nearStation(3.048567, 50.634268))
+
+#print(nearStation(3.048567, 50.634268))
