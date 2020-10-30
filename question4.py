@@ -1,3 +1,5 @@
+#Cette question a été réalisée avec l'aide de Mr Blarel pour la fonction area_search
+
 from pymongo import MongoClient
 from pprint import pprint 
 import requests
@@ -7,11 +9,12 @@ import dateutil.parser
 from bson.objectid import ObjectId
 import datetime
 
+
 client = MongoClient('mongodb+srv://admin:admin123@cluster0.ut8s6.gcp.mongodb.net/bicycle?retryWrites=true&w=majority')
 
 db = client.bicycle # or db = client['test-database']
 db.datas.create_index([('station_id', 1),('date', -1)], unique=True)
-db.stations2.create_index([('geometry','2dsphere')])
+db.stations2.create_index([('geometry','2dsphere')]) # on en a besoin pour la recherche par nom
 
 
 def getCityLille():
@@ -19,68 +22,50 @@ def getCityLille():
     url = "https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"  
     response = requests.request("GET",url)
     response_json = json.loads(response.text.encode('utf8'))
-    return(response_json.get("records",[]))
+    return response_json.get("records",[])
 
-
-
-def getVilleLyon():
-    url = "https://download.data.grandlyon.com/ws/grandlyon/pvo_patrimoine_voirie.pvostationvelov/all.json?maxfeatures=10&start=1"  
-    response = requests.request("GET",url)
-    response_json = json.loads(response.text.encode('utf8'))
-
-    return(response_json.get("records",[]))
-
-
-def getVilleParis():
+def getCityParis():
     url = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&facet=name&facet=is_installed&facet=is_renting&facet=is_returning&facet=nom_arrondissement_communes"  
     response = requests.request("GET",url)
     response_json = json.loads(response.text.encode('utf8'))
+    return response_json.get("records",[])
 
-    return(response_json.get("records",[]))
+def getCityLyon():
+    url = "https://download.data.grandlyon.com/ws/grandlyon/pvo_patrimoine_voirie.pvostationvelov/all.json?maxfeatures=10&start=1"  
+    response = requests.request("GET",url)
+    response_json = json.loads(response.text.encode('utf8'))
+    return response_json.get("records",[])
 
-
-def getVilleRennes():
+def getCityRennes():
     url = "https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=stations_vls&q="  
     response = requests.request("GET",url)
     response_json = json.loads(response.text.encode('utf8'))
-
-    return(response_json.get("records",[]))
+    return response_json.get("records",[])
 
 #program to find a station by name
-
 def getByname(nom):
     db.stations2.create_index([("name", "text")])
-    stations=db.stations2.find(
-        {
-            "$text":{
-                "$search": nom
-                }
-            }
-        )  
+    stations=db.stations2.find({"$text":{"$search": nom }})
 
     return (list(stations))
 
 
-#program to update a dtation
+#program to update a station
 def update_Stations_Name(id,name):
     try:
-        db.stations2.update_one(
-        {"_id":id},
-        {"$set": {'name':name}})
+        db.stations2.update_one( {"_id":id}, {"$set": {'name':name}})
     except:
         pprint("error update")
         pass
 
 #program to delete station and datas
 def delete_station(id):
-    db.stations2.delete_many(
-        {"_id":id}
-    )
-    db.datas.delete_many(
-        {"station_id":id}
-    )
+    db.stations2.delete_many( {"_id":id} )
+    db.datas.delete_many( {"station_id":id})
 
 
+#deactivate all 
+#On imagine une carte , délimitée par 4 points p1 a p4
 def area_search(p1,p2,p3,p4,state):
     db.stations2.update_many(
         {"geometry": {
@@ -100,7 +85,7 @@ def ratio_bike():
     L_stations = list(db.stations2.find({}))
     result = []
 
-    if (heure == 18 and day < 6):
+    if ((heure >= 18 and heure <= 19) and day < 6):
         data = list(db.datas.find({ "station_id": 1 }, { 'stand_availbale': 1 },{'bike_availbale': 1}) )
         for elem in data:
             ratio = elem['bike_availbale'] / elem['stand_availbale']
@@ -115,7 +100,8 @@ def ratio_bike():
 
     return(result)
 
-    print("Le result est ;  ", result)
+    
+print("Le result est :  ", ratio_bike)
 
 # print(getByname("gare"))
 
