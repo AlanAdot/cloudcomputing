@@ -103,20 +103,3 @@ def ratio_bike():
 #print("Le result est :  ", ratio_bike)
 
 # print(getByname("gare"))
-
-# update_Stations_Name(ObjectId('5f8d42a27d02a896fcfd7d96'),"test_new_name")
-
-# delete_station(ObjectId('5f8d42a37d02a896fcfd7d98'))
-
-# p1 = [3.01, 50.01]
-
-# p2 = [3.01,51.01]
-
-# p3 = [3.99,51.01]
-
-# p4 = [3.99,50.01]
-
-#area_search(p1,p2,p3,p4,False)
-
-
-#print(datetime.datetime.today().hour) 
